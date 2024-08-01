@@ -2,9 +2,9 @@ import os
 import re
 import time
 from pathlib import Path
-import string
+
 # do not remove the above line
-from utils import settings
+
 from playwright.sync_api import sync_playwright, ViewportSize
 
 from utils.console import print_step, print_substep
@@ -18,7 +18,6 @@ def name_normalize(name: str) -> str:
     name = re.sub(r"(\d+)\s?\/\s?(\d+)", r"\1 of \2", name)
     name = re.sub(r"(\w+)\s?\/\s?(\w+)", r"\1 or \2", name)
     name = re.sub(r"\/", r"", name)
-
 
 def download_screenshots_of_reddit_posts():
     """Downloads screenshots of reddit posts as seen on the web. Downloads to assets/temp/png
@@ -54,8 +53,6 @@ def download_screenshots_of_reddit_posts():
             url=url
         else:
             url="https://www.goodreads.com/quotes"
-        
-        name_status=input("Enter name status 1 for yes , 2 for no  :  ")
 
         parse=urlparse(url)
         filderno = f"{(re.sub('[^A-Za-z0-9]+', '_', parse.path))}"
@@ -67,9 +64,9 @@ def download_screenshots_of_reddit_posts():
             f.close()
             # print('last_line',last_line)
             # exit()
-            # f= open(f"youtube/{filderno}.txt", 'a')
-            # f.write(f'{int(last_line)+1} \n')
-            # f.close()
+            f= open(f"youtube/{filderno}.txt", 'a')
+            f.write(f'{int(last_line)+1} \n')
+            f.close()
             # print('ere')
         else:
             f= open(f"youtube/{filderno}.txt", 'a')
@@ -92,16 +89,13 @@ def download_screenshots_of_reddit_posts():
         # title= ["You know     ", "Someone says    ", "Here we go    ","people says   ","Do enjoy    "]
         comment['filderno']=f"youtube/{filderno}/{int(last_line)}"
         comment['thread_title']="Do enjoy    "
-        comment["thread_id"] = last_line
+        comment["thread_id"] = comment['thread_title']+" "+last_line
         comment["thread_post"] = comment['thread_title']+" "+last_line
-        comment["thread_update"] = f"youtube/{filderno}.txt"
-
         comment["comments"] = []
         multi=page.query_selector_all("(//div[@class='quote'])")
         # print(multi)
         count=0
         image=0
-        has=""
         for idx,single in enumerate(multi):
             if image==10:
                 image=0
@@ -113,46 +107,25 @@ def download_screenshots_of_reddit_posts():
             else:
                 text1=que1[0]
                 text2=que1[1]
-                qu=text2.split(",")
-                if len(qu)==1:
-                    text2=qu[0]
-                    text3=""
-                else:
-                    text2=qu[0]
-                    text3=qu[1]
-            imageline=text1.strip().replace('\n',' ')+"\n\n"+text2
-            # if len(text3)>1:
-            #     imageline=imageline+"\n"+text3
-            
-            hasedtext2="#"+text2.replace(' ','').replace('.','')
-            if hasedtext2 in has:
-                has=has
-            else:
-                has=has+" , "+hasedtext2
 
-            if int(name_status)!=1: 
-                text2=""
-            else:
-                text2=", by "+text2
-            # exit(text1+text2)
 
-            
-
-            quecount=len(re.findall(r'\w+', text1))
-            if quecount<40:
-                if imageline.replace('“',' ').replace('”',' ').isascii():
-                    comment['comments'].append({'comment_body': text1+text2,"imageline":imageline})
-                    print(count)
-                    count=len(comment['comments'])
-                    image+=1
+            quecount=len(re.findall(r'\w+', que))
+            if quecount<100:
+                page1 = context.new_page()
+                url=f"https://tools.ineotron.com/vdotron/render.php?pid=1099&slide={77+image}&final=1&text1="+text1+"&text2="+text2
+                page1.goto(url, timeout=0)
+                # page1.set_viewport_size(ViewportSize(width=881, height=350))
+                page1.locator("img").screenshot(path=f"assets/temp/png/comment_{count}.png")
+                # page.locator(f"(//div[@class='quoteText'])[{idx+1}]").screenshot(path=f"assets/temp/png/comment_{count}.png")
+                comment['comments'].append({'comment_body': que})
+                print(count)
+                time.sleep(2.4)
+                count=len(comment['comments'])
+                image+=1
                 
         # exit(que)
-        subreddit = settings.config["reddit"]["thread"]["subreddit"]
-        f= open(f"results/{subreddit}/{comment['filderno']}/quotehastag.txt", 'w')
-        f.write(has)
-        f.close()
-        end="Let me know in the comments below which line inspires you.\n\n If you enjoyed the content of this video, click the Subscribe button so you can receive more content like this every day."
-        comment['comments'].append({'comment_body': end+",","imageline":end})
+        
+
         print_substep("Screenshots downloaded Successfully.", style="bold green")
         return comment
        

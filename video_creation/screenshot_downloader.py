@@ -76,6 +76,7 @@ def download_screenshots_of_reddit_posts():
         else:
             f= open(f"shorts/{filderno}.txt", 'a')
             f.write('1 \n')
+            last_line="1"
             f.close()
         # print(last_line)
         # exit()

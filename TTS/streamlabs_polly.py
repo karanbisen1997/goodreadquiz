@@ -22,9 +22,11 @@ voices = [
     "Salli",
 ]
 voices = [
-    "Ivy",
-    "Justin",
-    "Raveena",
+    # "Ivy",
+    # "Justin",
+    # "Raveena",
+    "Aditi",
+    # "Brian",
 ]
 
 
