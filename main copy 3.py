@@ -29,10 +29,20 @@ __BRANCH__ = "master"
 def main(POST_ID=None):
     cleanup()
     reddit_object={}
-    reddit_object=download_screenshots_of_reddit_posts()
+    # reddit_object=download_screenshots_of_reddit_posts()
+    reddit_object['thread_title']="thank you for staying with me! ?.. see you again next time ?.. wait wait please like and subscribe to my channel."
+    reddit_object["thread_post"]="11111"
+    reddit_object['comments']=[]
+    reddit_object['comments'].append({'comment_body': "thank you for watching Come on please like and subscribe to my channel."})
+    reddit_object['comments'].append({'comment_body': "thank you for watching ?.. keep smiling please like and subscribe to my channel."})
+    reddit_object['comments'].append({'comment_body': "come on..get fire up fire up fire up?..subscribe."})
+    reddit_object['comments'].append({'comment_body': "welcome to my channel ?....lets gooo?.. subscribe."})
+    reddit_object['comments'].append({'comment_body': "welcome it's?.. time for Roller coaster ride ?..subscribe."})
+    reddit_object['comments'].append({'comment_body': "Have come ?.. get started?.. subscribe."})
     # print(reddit_object)
     # exit()
     length, number_of_comments = save_text_to_mp3(reddit_object)
+    exit()
     length = math.ceil(length)
     bg_config = get_background_config()
     # download_background(bg_config)
@@ -94,10 +104,3 @@ if __name__ == "__main__":
         cleanup()
         exit()
   
-
-
-#   credits = (TextClip(txt_credits, color='black',
-#             font="Keep-Calm-Medium", kerning=-2, interline=-1, size=intro.size)
-#           .set_duration(25)
-# 		  .set_start(5)
-#           )

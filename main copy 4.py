@@ -37,7 +37,7 @@ def main(POST_ID=None):
     bg_config = get_background_config()
     # download_background(bg_config)
     # chop_background_video(bg_config, length)
-    make_final_video(number_of_comments+1, length, reddit_object, bg_config,reddit_object['filderno'])
+    make_final_video(number_of_comments, length, reddit_object, bg_config)
 
 def run_many(times):
     for x in range(1, times + 1):
@@ -94,10 +94,3 @@ if __name__ == "__main__":
         cleanup()
         exit()
   
-
-
-#   credits = (TextClip(txt_credits, color='black',
-#             font="Keep-Calm-Medium", kerning=-2, interline=-1, size=intro.size)
-#           .set_duration(25)
-# 		  .set_start(5)
-#           )

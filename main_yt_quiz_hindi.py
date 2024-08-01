@@ -4,6 +4,7 @@ from subprocess import Popen
 from os import name
 import requests
 import time
+import copy
 from reddit.subreddit import get_subreddit_threads
 from utils.cleanup import cleanup
 from utils.console import print_markdown, print_step
@@ -14,30 +15,33 @@ import sys
 import os
 import re
 
-from video_creation.background import (
+from video_creation_yt_quiz_hindi.background import (
     download_background,
     chop_background_video,
     get_background_config,
 )
-from video_creation.final_video import make_final_video, name_normalize
-from video_creation.screenshot_downloader import download_screenshots_of_reddit_posts
-from video_creation.voices import save_text_to_mp3
+from video_creation_yt_quiz_hindi.final_video import make_final_video, name_normalize
+from video_creation_yt_quiz_hindi.screenshot_downloader import download_screenshots_of_reddit_posts
+from video_creation_yt_quiz_hindi.voices import save_text_to_mp3
 
 __VERSION__ = "2.3"
 __BRANCH__ = "master"
 
 def main(POST_ID=None):
-    cleanup()
+    # cleanup()
     reddit_object={}
     reddit_object=download_screenshots_of_reddit_posts()
+    reddit_object1=copy.deepcopy(reddit_object)
     # print(reddit_object)
-    # exit()
+    # exit(reddit_object1)
     length, number_of_comments = save_text_to_mp3(reddit_object)
+    # length, number_of_comments=10,10
+    # exit()
     length = math.ceil(length)
     bg_config = get_background_config()
     # download_background(bg_config)
     # chop_background_video(bg_config, length)
-    make_final_video(number_of_comments+1, length, reddit_object, bg_config,reddit_object['filderno'])
+    make_final_video(number_of_comments+1, length, reddit_object1, bg_config,reddit_object1['filderno'])
 
 def run_many(times):
     for x in range(1, times + 1):
@@ -94,10 +98,3 @@ if __name__ == "__main__":
         cleanup()
         exit()
   
-
-
-#   credits = (TextClip(txt_credits, color='black',
-#             font="Keep-Calm-Medium", kerning=-2, interline=-1, size=intro.size)
-#           .set_duration(25)
-# 		  .set_start(5)
-#           )
